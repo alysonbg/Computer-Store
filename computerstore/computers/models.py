@@ -1,3 +1,29 @@
 from django.db import models
 
-# Create your models here.
+
+BRANDS = (
+    ('INTEL', 'Intel'),
+    ('AMD', 'Amd')
+)
+
+
+class Processor(models.Model):
+    name = models.CharField(max_length=100)
+    brand = models.CharField(choices=BRANDS, max_length=10)
+
+
+class Memory(models.Model):
+    name = models.CharField(max_length=100)
+    size = models.IntegerField()
+
+
+class GraphicsCard(models.Model):
+    name = models.CharField(max_length=100)
+
+
+class MotherBoard(models.Model):
+    name = models.CharField(max_length=100)
+    brand = models.CharField(choices=BRANDS, max_length=10)
+    processor = models.ForeignKey('Processor', on_delete=models.CASCADE)
+    memory = models.ForeignKey('Memory', on_delete=models.CASCADE)
+    gpu = models.ForeignKey('GraphicsCard', on_delete=models.CASCADE, blank=True, null=True)
