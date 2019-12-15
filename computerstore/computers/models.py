@@ -48,4 +48,4 @@ class Order(models.Model):
     gpu = models.ForeignKey('GraphicsCard', on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
-        return self.id
+        return '{} - {}'.format(self.client, self.id)
