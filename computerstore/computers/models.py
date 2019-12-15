@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.core.exceptions import ValidationError
 
 BRANDS = (
     ('INTEL', 'Intel'),
@@ -27,3 +27,6 @@ class MotherBoard(models.Model):
     processor = models.ForeignKey('Processor', on_delete=models.CASCADE)
     memory = models.ForeignKey('Memory', on_delete=models.CASCADE)
     gpu = models.ForeignKey('GraphicsCard', on_delete=models.CASCADE, blank=True, null=True)
+    ram_slots = models.IntegerField()
+    max_ram = models.IntegerField()
+    integrated_graphics = models.BooleanField()
