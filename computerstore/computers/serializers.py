@@ -7,20 +7,24 @@ class ProcessorSerializer(serializers.ModelSerializer):
         model = Processor
         fields = ['name']
 
+
 class MemorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Memory
         fields = ['name']
+
 
 class GraphicsCardSerializer(serializers.ModelSerializer):
     class Meta:
         model = GraphicsCard
         fields = ['name']
 
+
 class MotherBoardSerializer(serializers.ModelSerializer):
     class Meta:
         model = MotherBoard
         fields = ['name']
+
 
 class OrderSerializer(serializers.ModelSerializer):
     client = serializers.CharField(max_length=100)
