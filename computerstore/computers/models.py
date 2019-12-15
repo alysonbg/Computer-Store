@@ -24,9 +24,14 @@ class GraphicsCard(models.Model):
 class MotherBoard(models.Model):
     name = models.CharField(max_length=100)
     brand = models.CharField(choices=BRANDS, max_length=10)
-    processor = models.ForeignKey('Processor', on_delete=models.CASCADE)
-    memory = models.ForeignKey('Memory', on_delete=models.CASCADE)
-    gpu = models.ForeignKey('GraphicsCard', on_delete=models.CASCADE, blank=True, null=True)
     ram_slots = models.IntegerField()
     max_ram = models.IntegerField()
     integrated_graphics = models.BooleanField()
+
+
+class Order(models.Model):
+    client = models.CharField(max_length=100)
+    motherboard = models.ForeignKey('MotherBoard', on_delete=models.CASCADE)
+    processor = models.ForeignKey('Processor', on_delete=models.CASCADE)
+    memory = models.ForeignKey('Memory', on_delete=models.CASCADE)
+    gpu = models.ForeignKey('GraphicsCard', on_delete=models.CASCADE, blank=True, null=True)
