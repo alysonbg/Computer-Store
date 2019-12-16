@@ -30,7 +30,7 @@ class OrderSerializer(serializers.ModelSerializer):
     client = serializers.CharField(max_length=100)
     processor = serializers.SlugRelatedField(slug_field='name', queryset=Processor.objects.all())
     memory = serializers.SlugRelatedField(slug_field='name', queryset=Memory.objects.all(), many=True)
-    gpu = serializers.SlugRelatedField(slug_field='name', queryset=GraphicsCard.objects.all())
+    gpu = serializers.SlugRelatedField(slug_field='name', queryset=GraphicsCard.objects.all(), required=False)
     motherboard = serializers.SlugRelatedField(slug_field='name', queryset=MotherBoard.objects.all())
 
     class Meta:
@@ -46,3 +46,6 @@ class OrderSerializer(serializers.ModelSerializer):
 
         if processor.brand != motherboard.brand:
             raise serializers.ValidationError("Processador e placa mão não são compativeis")
+
+        if not motherboard.integrated_graphics and 'gpu' not in data.keys():
+            raise serializers.ValidationError('Placa mãe precisa de uma placa de vídeo!')
