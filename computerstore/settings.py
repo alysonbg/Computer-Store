@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 from decouple import config, Csv
 from dj_database_url import parse as dburl
-import rest_framework
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -122,6 +121,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 REST_FRAMEWORK = {
-    'DEFAULT_RENDERER_CLASSES': 
-    config('DEFAULT_RENDERER_CLASSES', cast=tuple, default=('rest_framework.renderers.BrowsableAPIRenderer',)),
+        'DEFAULT_RENDERER_CLASSES': config(
+                                            'DEFAULT_RENDERER_CLASSES', cast=tuple,
+                                            default=('rest_framework.renderers.BrowsableAPIRenderer',)
+                                    ),
 }
