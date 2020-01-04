@@ -36,6 +36,7 @@ class OrderSerializer(serializers.ModelSerializer):
         processor = data['processor']
         motherboard = data['motherboard']
         memory = data['memory']
+        total_ram = sum(m.size for m in memory)
 
         if processor.brand != motherboard.brand:
             raise serializers.ValidationError('Processador e placa mão não são compativeis')
@@ -46,6 +47,8 @@ class OrderSerializer(serializers.ModelSerializer):
         if motherboard.ram_slots < len(memory):
             raise serializers.ValidationError(f'Place mãe só possui {motherboard.ram_slots}')
 
+        if total_ram > motherboard.max_ram:
+            raise serializers.ValidationError('A quantidade de ram é maior do que a quantidade máxima da placa mãe')
         return data
 
     def to_representation(self, instance):

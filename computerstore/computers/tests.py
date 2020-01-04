@@ -70,4 +70,17 @@ class ApiTesting(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_if_is_not_possible_to_create_an_order_that_exceeds_max_memory(self):
+        """Testa se nao e possivel criar uma ordem que exceda a quantidade maxima de ram da placa mae"""
+        url = reverse('orders')
+        data = {
+            'client': 'Test99',
+            'processor': self.processor_intel.id,
+            'motherboard': self.mother_board.id,
+            'memory':[self.memory_16gb.id for _ in range(2)],
+            'gpu': self.gpu.id,
+        }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     
