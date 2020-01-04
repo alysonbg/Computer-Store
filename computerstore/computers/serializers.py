@@ -30,7 +30,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ['id','client', 'processor', 'memory', 'gpu', 'motherboard']
+        fields = ['id', 'client', 'processor', 'memory', 'gpu', 'motherboard']
 
     def validate(self, data):
         processor = data['processor']
