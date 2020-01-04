@@ -43,4 +43,16 @@ class ApiTesting(APITestCase):
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_graphicscard_motherboard_validation(self):
+        """Testa se nao e possivel criar uma ordem tem gpu, caso a placa mae nao tenha video integrado"""
+        url = reverse('orders')
+        data = {
+            'client': 'Test99',
+            'processor': self.processor_intel.id,
+            'motherboard': self.mother_board.id,
+            'memory': [self.memory_4gb.id]
+        }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
     
