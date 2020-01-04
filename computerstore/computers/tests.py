@@ -16,6 +16,7 @@ class ApiTesting(APITestCase):
             integrated_graphics=False
         )
         self.memory_4gb = Memory.objects.create(name='Hyper X', size=4)
+        self.memory_16gb = Memory.objects.create(name='Hyper X', size=16)
         self.gpu = GraphicsCard.objects.create(name='Placa de Video Gigabyte Geforce GTX 1060 6GB')
 
     def test_create_a_new_order(self):
@@ -55,3 +56,18 @@ class ApiTesting(APITestCase):
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_if_is_not_possible_to_create_an_order_that_exceeds_memory_slots(self):
+        """Testa se nao e possivel criar uma ordem que exceda o numero de slots da placa mae"""
+        url = reverse('orders')
+        data = {
+            'client': 'Test99',
+            'processor': self.processor_intel.id,
+            'motherboard': self.mother_board.id,
+            'memory':[self.memory_4gb.id for _ in range(3)],
+            'gpu': self.gpu.id,
+        }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    

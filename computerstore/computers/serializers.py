@@ -35,12 +35,16 @@ class OrderSerializer(serializers.ModelSerializer):
     def validate(self, data):
         processor = data['processor']
         motherboard = data['motherboard']
+        memory = data['memory']
 
         if processor.brand != motherboard.brand:
             raise serializers.ValidationError('Processador e placa mão não são compativeis')
 
         if not motherboard.integrated_graphics and 'gpu' not in data.keys():
             raise serializers.ValidationError('Placa mãe precisa de uma placa de vídeo!')
+
+        if motherboard.ram_slots < len(memory):
+            raise serializers.ValidationError(f'Place mãe só possui {motherboard.ram_slots}')
 
         return data
 
