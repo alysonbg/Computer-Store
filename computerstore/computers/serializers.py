@@ -5,13 +5,13 @@ from computerstore.computers.models import Order, Processor, Memory, GraphicsCar
 class ProcessorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Processor
-        fields = ['name']
+        fields = ['name', 'brand']
 
 
 class MemorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Memory
-        fields = ['name']
+        fields = ['name', 'size']
 
 
 class GraphicsCardSerializer(serializers.ModelSerializer):
@@ -23,29 +23,31 @@ class GraphicsCardSerializer(serializers.ModelSerializer):
 class MotherBoardSerializer(serializers.ModelSerializer):
     class Meta:
         model = MotherBoard
-        fields = ['name']
+        fields = ['name', 'brand', 'ram_slots', 'max_ram', 'integrated_graphics']
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    client = serializers.CharField(max_length=100)
-    processor = serializers.SlugRelatedField(slug_field='name', queryset=Processor.objects.all())
-    memory = serializers.SlugRelatedField(slug_field='name', queryset=Memory.objects.all(), many=True)
-    gpu = serializers.SlugRelatedField(slug_field='name', queryset=GraphicsCard.objects.all(), required=False)
-    motherboard = serializers.SlugRelatedField(slug_field='name', queryset=MotherBoard.objects.all())
 
     class Meta:
         model = Order
-        fields = ['client', 'processor', 'memory', 'gpu', 'motherboard']
+        fields = ['id', 'client', 'processor', 'memory', 'gpu', 'motherboard']
 
     def validate(self, data):
-        data = self.get_initial()
-        processor_data = data['processor']
-        motherboard_data = data['motherboard']
-        processor = Processor.objects.get(name__exact=processor_data)
-        motherboard = MotherBoard.objects.get(name__exact=motherboard_data)
+        processor = data['processor']
+        motherboard = data['motherboard']
 
         if processor.brand != motherboard.brand:
-            raise serializers.ValidationError("Processador e placa mão não são compativeis")
+            raise serializers.ValidationError('Processador e placa mão não são compativeis')
 
         if not motherboard.integrated_graphics and 'gpu' not in data.keys():
             raise serializers.ValidationError('Placa mãe precisa de uma placa de vídeo!')
+
+        return data
+
+    def to_representation(self, instance):
+        data = super(OrderSerializer, self).to_representation(instance)
+        data['processor'] = ProcessorSerializer(instance.processor).data
+        data['memory'] = [MemorySerializer(memory).data for memory in Memory.objects.filter(pk__in=data['memory'])]
+        data['gpu'] = GraphicsCardSerializer(instance.gpu).data
+        data['motherboard'] = MotherBoardSerializer(instance.motherboard).data
+        return data
