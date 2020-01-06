@@ -38,7 +38,7 @@ class OrderSerializer(serializers.ModelSerializer):
         memory = data['memory']
         total_ram = sum(m.size for m in memory)
         motherboard_brands = [brand.name for brand in motherboard.brand.all()]
-        
+
         if processor.brand.name not in motherboard_brands:
             raise serializers.ValidationError('Processador e placa mãe não são compativeis')
 
