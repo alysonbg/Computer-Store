@@ -5,7 +5,7 @@ from computerstore.computers.models import Order, Processor, Memory, GraphicsCar
 class ProcessorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Processor
-        fields = ['name', 'brand']
+        fields = ['name']
 
 
 class MemorySerializer(serializers.ModelSerializer):
@@ -23,7 +23,7 @@ class GraphicsCardSerializer(serializers.ModelSerializer):
 class MotherBoardSerializer(serializers.ModelSerializer):
     class Meta:
         model = MotherBoard
-        fields = ['name', 'brand', 'ram_slots', 'max_ram', 'integrated_graphics']
+        fields = ['name', 'ram_slots', 'max_ram', 'integrated_graphics']
 
 
 class OrderSerializer(serializers.ModelSerializer):
