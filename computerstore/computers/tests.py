@@ -1,20 +1,22 @@
 from django.urls import reverse
 from rest_framework.test import APITestCase
 from rest_framework import status
-from .models import Processor, Memory, MotherBoard, GraphicsCard
+from .models import Processor, Memory, MotherBoard, GraphicsCard, Brand
 
 
 class ApiTesting(APITestCase):
     def setUp(self):
-        self.processor_intel = Processor.objects.create(name='Processador Intel Core i7', brand='INTEL')
-        self.processor_amd = Processor.objects.create(name='Processador AMD Athlon', brand='AMD')
+        self.brand_intel = Brand.objects.create(name='INTEL')
+        self.brand_amd = Brand.objects.create(name='AMD')
+        self.processor_intel = Processor.objects.create(name='Processador Intel Core i7', brand=self.brand_intel)
+        self.processor_amd = Processor.objects.create(name='Processador AMD Athlon', brand=self.brand_amd)
         self.mother_board = MotherBoard.objects.create(
             name='Placa Mãe AsusPrime',
-            brand='INTEL',
             ram_slots=2,
             max_ram=16,
             integrated_graphics=False
         )
+        self.mother_board.brand.add(self.brand_intel)
         self.memory_4gb = Memory.objects.create(name='Hyper X', size=4)
         self.memory_16gb = Memory.objects.create(name='Hyper X', size=16)
         self.gpu = GraphicsCard.objects.create(name='Placa de Video Gigabyte Geforce GTX 1060 6GB')

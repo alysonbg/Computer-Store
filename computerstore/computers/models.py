@@ -1,14 +1,16 @@
 from django.db import models
 
-BRANDS = (
-    ('INTEL', 'Intel'),
-    ('AMD', 'Amd')
-)
+
+class Brand(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
 
 
 class Processor(models.Model):
     name = models.CharField(max_length=100)
-    brand = models.CharField(choices=BRANDS, max_length=10)
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -21,6 +23,9 @@ class Memory(models.Model):
     def __str__(self):
         return '{} {}GB'.format(self.name, self.size)
 
+    class Meta:
+        verbose_name_plural = 'Memories'
+
 
 class GraphicsCard(models.Model):
     name = models.CharField(max_length=100)
@@ -31,7 +36,7 @@ class GraphicsCard(models.Model):
 
 class MotherBoard(models.Model):
     name = models.CharField(max_length=100)
-    brand = models.CharField(choices=BRANDS, max_length=10)
+    brand = models.ManyToManyField(Brand)
     ram_slots = models.IntegerField()
     max_ram = models.IntegerField()
     integrated_graphics = models.BooleanField()
