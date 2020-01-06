@@ -2,7 +2,7 @@
 
 ## Api que simula uma loja de computadores
 
-# Para rodar o projeto sigua as instruções:
+### Para rodar o projeto sigua as instruções:
 1. Clone o repositorio 
 2. Crie um virtualenv
 3. Rode o comando pip install -r requirements.txt
