@@ -1,5 +1,6 @@
 from computerstore.computers.models import Order, MotherBoard, Memory, GraphicsCard, Processor
-from computerstore.computers.serializers import OrderSerializer, MotherBoardSerializer, MemorySerializer, GraphicsCardSerializer, ProcessorSerializer
+from computerstore.computers.serializers import OrderSerializer, MotherBoardSerializer, MemorySerializer, \
+     GraphicsCardSerializer, ProcessorSerializer
 from rest_framework import viewsets
 
 
@@ -10,7 +11,7 @@ class OrderViewSet(viewsets.ModelViewSet):
 
 class MotherBoardViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = MotherBoard.objects.all()
-    serializer_class = MemorySerializer
+    serializer_class = MotherBoardSerializer
 
 
 class MemoryViewSet(viewsets.ReadOnlyModelViewSet):
